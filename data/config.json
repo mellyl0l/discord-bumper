@@ -1,0 +1,9 @@
+{
+    "DELAY_IN_SECONDS": 5,
+    "DISCORD_TOKEN": "",
+    "DISCORD_MESSAGE": "",
+    "DISCORD_CHANNELS": [
+        123,
+        1234
+    ]
+}
