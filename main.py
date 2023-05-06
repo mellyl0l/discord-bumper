@@ -1,32 +1,34 @@
-import discum, json, time, asyncio, colorama
-from colorama import Fore, Style; colorama.init(autoreset=True)
+import discum, json, time, asyncio, colorama, requests
+from colorama import Fore; colorama.init(autoreset=True)
 
-with open("data/config.json") as f: config = json.load(f) # load cfg file and store it as config variable to access later
+with open("data/config.json") as f: config = json.load(f)
+[print(f"{Fore.RED}Please fill out the {Fore.YELLOW}{key}{Fore.RED} value in the config.") for key in config if not config[key]]; exit() if not all(config.values()) else None
 
-if not config["DISCORD_TOKEN"]: print(f"{Fore.RED}Please fill out the config file with your token"); exit()
-if not config["DISCORD_CHANNELS"]: print(f"{Fore.RED}Please fill out the config file with the channels you want to bump in"); exit()
-if not config["DISCORD_MESSAGE"]: print(f"{Fore.RED}Please fill out the config file with the message you want to send"); exit()
-if not config["DELAY_IN_SECONDS"]: print(f"{Fore.RED}Please fill out the config file with the delay in seconds"); exit()
+# check if this is the latest version
+if requests.get(config["URL"]).text != open("main.py").read():
+    print(f"{Fore.RED}Please update the script to the latest version: {Fore.YELLOW}")
 
-class bumper: # create a class to store functions and have an initilizer in
-    def __init__(self) -> None: # initilizer
-        self.bot = discum.Client(token=config["DISCORD_TOKEN"], log=False) # create a client instance and access our config file to get the token
-        self.channels = config["DISCORD_CHANNELS"] # store channels to bump in as a variable
+class bumper:
+    def __init__(self) -> None:
+        self.bot = discum.Client(token=config["DISCORD_TOKEN"], log=False)
+        self.channels = config["DISCORD_CHANNELS"]
     
-    async def bump(self): # function to bump the x channels in the channels variable
-        while True: # constantly run
+    async def bump(self):
+        while True:
             try:
-                print(f"{Fore.GREEN}Bumping") # print bumping to the console
-                [self.bot.sendMessage(str(channel), config["DISCORD_MESSAGE"]) for channel in self.channels]; time.sleep(config["DELAY_IN_SECONDS"]) # send the message to the channels and wait the delay in seconds
+                print(f"{Fore.GREEN}Bumping")
+                [self.bot.sendMessage(str(channel), config["DISCORD_MESSAGE"]) for channel in self.channels]; time.sleep(config["DELAY_IN_SECONDS"])
             except Exception as e:
-                print(f"{Fore.RED}Error: {Fore.WHITE}{e}") # if there is an error print it to the console
-                pass # pass and continue
+                print(f"{Fore.RED}Error: {Fore.WHITE}{e}")
+                pass
 
-    def run(self): # function to run the bot
+    def run(self):
         print(f"{Fore.GREEN}Bumping {Fore.YELLOW}{len(self.channels)}{Fore.GREEN} channels every {Fore.YELLOW}{config['DELAY_IN_SECONDS']}{Fore.GREEN} seconds")
-        asyncio.run(self.bump()) # run the bump function
-        self.bot.gateway.run(auto_reconnect=True) # run the gateway & auto reconnect if it disconnects
+        asyncio.run(self.bump())
+        self.bot.gateway.run(auto_reconnect=True)
 
-if __name__ == "__main__": # if the file is ran directly
-    bot = bumper() # create a instance of the class
-    bot.run() # run the bot
+if __name__ == "__main__":
+    #print(requests.get("https://raw.githubusercontent.com/mellyl0l/discord-bumper/main/main.py").text)
+    ...
+    #bot = bumper()
+    #bot.run()

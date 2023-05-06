@@ -1,9 +1,9 @@
 {
-    "DELAY_IN_SECONDS": 5,
-    "DISCORD_TOKEN": "",
-    "DISCORD_MESSAGE": "hello this is a test message",
+    "URL": "https://raw.githubusercontent.com/mellyl0l/discord-bumper/main/main.py",
+    "DELAY_IN_SECONDS": 1,
+    "DISCORD_TOKEN": "asasd",
+    "DISCORD_MESSAGE": "asd",
     "DISCORD_CHANNELS": [
-        12,
         123
     ]
 }
